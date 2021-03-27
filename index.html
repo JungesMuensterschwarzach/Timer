@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="de">
+	<head>
+        <meta charset="UTF-8"/>
+        <script src="js/jquery.min.js"></script>
+        <script src="js/script.js"></script>
+        <link rel="stylesheet" href="css/style.css"/>
+	</head>
+	<body>
+		<div id="form">
+            <form action="" method="GET" onsubmit="return false">
+                <label for="time">Time:</label><br/>
+                <input name="time" type="time" value="03:00"/><br/><br/>
+
+                <label for="video">Video:</label><br/>
+                <input name="video" type="radio" value="sunrise_city" id="sunrise_city"/>
+                <label for="sunrise_city">City</label><br/>
+                <input name="video" type="radio" value="sunrise_desert" id="sunrise_desert"/>
+                <label for="sunrise_desert">Desert</label><br/>
+                <input name="video" type="radio" value="sunrise_forest" id="sunrise_forest"/>
+                <label for="sunrise_forest">Forest</label><br/>
+                <input name="video" type="radio" value="sunrise_mountain_lake" id="sunrise_mountain_lake"/>
+                <label for="sunrise_mountain_lake">Mountain Lake</label><br/>
+                <input name="video" type="radio" value="sunrise_sea" id="sunrise_sea" checked="checked"/>
+                <label for="sunrise_sea">Sea</label><br/>
+                <input name="video" type="radio" value="sunrise_town" id="sunrise_town"/>
+                <label for="sunrise_town">Town</label><br/><br/>
+
+                <input type="submit" value="Start" onclick="start(this.form);"/>
+            </form>
+		</div>
+        <div id="player">
+            <!-- video source is rendered here -->
+            <div id="remaining-text">
+                <div class="center-item">
+                    <!-- remaining duration as text is rendered here -->
+                </div>
+            </div>
+        </div>
+	</body>
+</html>

@@ -1,0 +1,34 @@
+html { 
+    height:100%;
+}
+body { 
+    min-height:100%;
+}
+
+body {
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+}
+
+video {
+    object-fit: fill;
+}
+
+#remaining-text {
+    position: absolute;
+    left: 50%;
+    top: 15%;
+}
+
+#remaining-progressbar {
+    position: absolute;
+    left: 50%;
+    bottom: 15%;
+}
+
+.center-item {
+    position: relative;
+    left: -50%;
+    top: -50%;
+}
