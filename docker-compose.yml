@@ -1,0 +1,17 @@
+version: '3'
+services:
+  jmt:
+    container_name: jmt
+    image: jungesmuensterschwarzach/timer:latest
+    build:
+      context: .
+    restart: on-failure
+    networks:
+      jenkins:
+        ipv4_address: 172.16.1.230
+networks:
+  default:
+    external:
+      name: jenkins
+  jenkins:
+    external: true

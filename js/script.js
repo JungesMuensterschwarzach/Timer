@@ -6,10 +6,8 @@ $(document).ready(() => {
 
 class VideoTimer {
 
-    constructor(time) {
-        const timeParts = time.split(":").map(x => parseInt(x));
-
-        this.totalSeconds = timeParts[0] * 60 + timeParts[1];
+    constructor(minutes) {
+        this.totalSeconds = minutes * 60;
         this.currentSeconds = 0;
     }
 
@@ -24,6 +22,7 @@ class VideoTimer {
 
             this.renderProgress();
         }, 1000);
+        $("#remaining-progressbar").show();
     }
 
     stop() {
@@ -33,10 +32,6 @@ class VideoTimer {
     }
 
     renderProgress() {
-        this.renderRemainingDuration();
-    }
-
-    renderRemainingDuration() {
         const remainingMinutes = this.getRemainingMinutes();
 
         let text = "";
@@ -52,11 +47,8 @@ class VideoTimer {
             }
         }
 
-        $("#remaining-text > div").text(text);
-    }
-
-    renderProgressBar() {
-
+        $("#progress").width(this.getPercent() + "%");
+        $("#progress-text").text(text);
     }
 
     getRemainingMinutes() {
@@ -72,24 +64,29 @@ class VideoTimer {
     }
 
     getPercent() {
-        return this.currentSeconds / this.totalSeconds;
+        return Math.ceil(this.currentSeconds * 100 / this.totalSeconds);
     }
 }
 
 function start(form) {
-    timer = new VideoTimer(form.time.value);
+    $("#form").remove();
 
-    renderVideo(form.video.value)
+    const video = form.video.value;
+    timer = new VideoTimer(form.minutes.value);
+
+    renderVideo(video);
+    renderAudio(video);
+    renderCredits(video);
     updatePlayerSize();
     updatePlaybackRate(timer);
+    updateAudioVolume();
 
     timer.start();
     playVideo();
+    playAudio();
 }
 
 function renderVideo(video) {
-    $("#form").remove();
-
     const videoObj = $("<video/>", {
         id: "video"
     });
@@ -98,6 +95,42 @@ function renderVideo(video) {
         type: "video/webm"
     }).appendTo(videoObj);
     videoObj.prependTo($("#player"));
+}
+
+function renderAudio(video) {
+    const audioObj = $("<audio/>", {
+        id: "audio"
+    });
+    $("<source/>", {
+        src: "audio/"+video+".mp3",
+        type: "audio/mpeg"
+    }).appendTo(audioObj);
+    audioObj.prependTo($("#player"));
+}
+
+function renderCredits(video) {
+    renderVideoCredits(video);
+    renderAudioCredits(video);
+}
+
+function renderVideoCredits(video) {
+    const req = new XMLHttpRequest();
+    req.open("GET", "video_sources/"+video+".txt", false);
+    req.send();
+
+    const videoCredits = req.responseText;
+    $("#video-credits").html(videoCredits);
+    $("#video-credits-container").show();
+}
+
+function renderAudioCredits(video) {
+    const req = new XMLHttpRequest();
+    req.open("GET", "audio_sources/"+video+".txt", false);
+    req.send();
+
+    const audioCredits = req.responseText;
+    $("#audio-credits").html(audioCredits);
+    $("#audio-credits-container").show();
 }
 
 function updatePlayerSize() {
@@ -118,6 +151,14 @@ function updatePlaybackRate(timer) {
     });
 }
 
+function updateAudioVolume() {
+    $("#audio").get(0).volume = 0.1;
+}
+
 function playVideo() {
     $("#video").get(0).play();
+}
+
+function playAudio() {
+    $("#audio").get(0).play();
 }
