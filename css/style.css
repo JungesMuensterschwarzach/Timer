@@ -52,6 +52,36 @@ audio {
     text-align: right;
 }
 
+#audio-half-time-credits-container {
+    font-size: xx-small;
+    color: #ffffff;
+    position: absolute;
+    left: 25%;
+    bottom: 1%;
+}
+
+#audio-half-time-credits {
+    position: relative;
+    left: 0%;
+    top: -100%;
+    text-align: center;
+}
+
+#audio-ending-time-credits-container {
+    font-size: xx-small;
+    color: #ffffff;
+    position: absolute;
+    right: 25%;
+    bottom: 1%;
+}
+
+#audio-ending-time-credits {
+    position: relative;
+    left: 0%;
+    top: -100%;
+    text-align: center;
+}
+
 #remaining-progressbar {
     position: absolute;
     left: 50%;
@@ -72,6 +102,9 @@ audio {
     border-radius: 1em;
     height: 30px;
     width: 0%;
+}
+#progress.finished {
+    background-color: #3b9e3b;
 }
 
 #progress-text-container {

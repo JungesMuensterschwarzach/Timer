@@ -13,15 +13,20 @@ class VideoTimer {
 
     start() {
         this.stop();
+
         this.intervalHandle = setInterval(() => {
             this.currentSeconds++;
 
-            if (this.currentSeconds >= this.totalSeconds) {
+            if (this.currentSeconds == Math.floor(this.totalSeconds / 2)) {
+                renderAudioHalfTimeNotification();
+            } else if (this.currentSeconds >= this.totalSeconds) {
+                renderAudioEndTimeNotification();
                 this.stop();
             }
 
             this.renderProgress();
         }, 1000);
+        $("#progress").removeClass("finished");
         $("#remaining-progressbar").show();
     }
 
@@ -29,6 +34,7 @@ class VideoTimer {
         if (this.intervalHandle) {
             clearInterval(this.intervalHandle);
         }
+        $("#progress").addClass("finished");
     }
 
     renderProgress() {
@@ -108,6 +114,30 @@ function renderAudio(video) {
     audioObj.prependTo($("#player"));
 }
 
+function renderAudioHalfTimeNotification() {
+    const audioObj = $("<audio/>", {
+        id: "audio-half-time-notification"
+    });
+    $("<source/>", {
+        src: "audio/notification_sound_half.mp3",
+        type: "audio/mpeg"
+    }).appendTo(audioObj);
+    audioObj.prependTo($("#player"));
+    audioObj.get(0).play();
+}
+
+function renderAudioEndTimeNotification() {
+    const audioObj = $("<audio/>", {
+        id: "audio-ending-time-notification"
+    });
+    $("<source/>", {
+        src: "audio/notification_sound_ending.mp3",
+        type: "audio/mpeg"
+    }).appendTo(audioObj);
+    audioObj.prependTo($("#player"));
+    audioObj.get(0).play();
+}
+
 function renderCredits(video) {
     renderVideoCredits(video);
     renderAudioCredits(video);
@@ -152,7 +182,7 @@ function updatePlaybackRate(timer) {
 }
 
 function updateAudioVolume() {
-    $("#audio").get(0).volume = 0.1;
+    $("#audio").get(0).volume = 0.5;
 }
 
 function playVideo() {
