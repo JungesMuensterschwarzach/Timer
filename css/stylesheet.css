@@ -2,7 +2,6 @@
 
 body {
     margin: 0;
-    overflow: hidden;
     padding: 0;
 }
 
@@ -28,16 +27,76 @@ textarea, input[type="checkbox"] {
     color: #f18613;
 }
 
+.popover-header {
+    padding: 0.2em 0.4em;
+}
+
+.popover-body {
+    padding: 0.4em 0.4em;
+}
+
 .center-item {
     position: relative;
     left: -50%;
     top: -50%;
 }
 
+/* autoplay */
+
+#autoplay {
+    display: none;
+}
+
+#autoplay-container {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+}
+
 /* player */
 
 #player {
     display: none;
+}
+
+/* share */
+
+#share-container {
+    background-color: #d3d3d3;
+    border-radius: 5px;
+    cursor: pointer;
+    line-height: 0;
+    padding: 5px;
+    position: absolute;
+    top: 1%;
+    left: 1%;
+}
+
+/* text */
+
+#text-container {
+    display: none;
+    position: absolute;
+    left: 50%;
+    top: 3%;
+}
+
+#text {
+    background-color: #d3d3d3;
+    border-radius: 5px;
+    font-size: x-large;
+    padding: 3px 6px;
+    position: relative;
+    left: -50%;
+}
+
+/* logo */
+
+#logo-container {
+    cursor: pointer;
+    position: absolute;
+    top: 1%;
+    right: 1%;
 }
 
 /* credits */
