@@ -1,44 +1,131 @@
-$(document).ready(() => {
-    $(window).on("resize", () => {
-        updatePlayerSize();
-    });
-});
-
 class VideoTimer {
 
-    constructor(minutes) {
-        this.totalSeconds = minutes * 60;
+    constructor(seconds, scene, playBackgroundMusic) {
         this.currentSeconds = 0;
+        this.totalSeconds = seconds;
+        this.scene = scene;
+        this.playBackgroundMusic = playBackgroundMusic;
     }
 
     start() {
-        this.stop();
+        $("#form").hide();
 
+        this.renderVideo();
+        if (this.playBackgroundMusic) {
+            this.renderBackgroundMusic();
+        }
+
+        $("#player").show();
+        this.beginTicking();
+    }
+
+    renderVideo() {
+        this.renderVideoObject();
+        this.renderVideoCredits();        
+    }
+
+    renderVideoObject() {
+        const videoObj = $("<video/>", {
+            id: "video"
+        });
+        $("<source/>", {
+            src: "videos/"+this.scene+".webm",
+            type: "video/webm"
+        }).appendTo(videoObj);
+        videoObj.appendTo($("#video-container"));
+        this.updatePlayerSize();
+        $("#video").on("durationchange", () => {
+            // = onload
+            const videoDOM = $("#video").get(0);
+            const videoDuration = videoDOM.duration;
+            const timerDuration = this.totalSeconds;
+    
+            videoDOM.playbackRate = videoDuration / timerDuration;
+            videoDOM.play();
+        });
+    }
+
+    renderVideoCredits() {
+        const req = new XMLHttpRequest();
+        req.open("GET", "video_sources/"+this.scene+".txt", false);
+        req.send();
+
+        const videoCredits = req.responseText;
+        $("#video-credits").html(videoCredits);
+    }
+
+    renderBackgroundMusic() {
+        this.renderBackgroundMusicObject();
+        this.renderBackgroundMusicCredits();
+    }
+
+    renderBackgroundMusicObject() {
+        const audioObj = $("<audio/>", {
+            id: "audio-background"
+        });
+        $("<source/>", {
+            src: "audio/"+this.scene+".mp3",
+            type: "audio/mpeg"
+        }).appendTo(audioObj);
+        audioObj.prependTo($("#audio-container"));
+        audioObj.get(0).volume = 0.5;
+        audioObj.get(0).play();
+    }
+
+    renderBackgroundMusicCredits() {
+        const req = new XMLHttpRequest();
+        req.open("GET", "audio_sources/"+this.scene+".txt", false);
+        req.send();
+
+        const audioCredits = req.responseText;
+        $("#audio-background-music-credits").html(audioCredits);
+    }
+
+    renderHalfTimeSound() {
+        const audioObj = $("<audio/>", {
+            id: "audio-half-time"
+        });
+        $("<source/>", {
+            src: "audio/notification_sound_half.mp3",
+            type: "audio/mpeg"
+        }).appendTo(audioObj);
+        audioObj.prependTo($("#audio-container"));
+        audioObj.get(0).play();
+    }
+
+    renderEndingTimeSound() {
+        const audioObj = $("<audio/>", {
+            id: "audio-ending-time"
+        });
+        $("<source/>", {
+            src: "audio/notification_sound_ending.mp3",
+            type: "audio/mpeg"
+        }).appendTo(audioObj);
+        audioObj.prependTo($("#audio-container"));
+        audioObj.get(0).play();
+    }
+
+    beginTicking() {
         this.intervalHandle = setInterval(() => {
             this.currentSeconds++;
 
             if (this.currentSeconds == Math.floor(this.totalSeconds / 2)) {
-                renderAudioHalfTimeNotification();
+                this.renderHalfTimeSound();
             } else if (this.currentSeconds >= this.totalSeconds) {
-                renderAudioEndTimeNotification();
+                this.renderEndingTimeSound();
                 this.stop();
             }
 
             this.renderProgress();
         }, 1000);
-        $("#progress").removeClass("finished");
-        $("#remaining-progressbar").show();
-    }
 
-    stop() {
-        if (this.intervalHandle) {
-            clearInterval(this.intervalHandle);
-        }
-        $("#progress").addClass("finished");
+        $(window).on("resize", () => {
+            this.updatePlayerSize();
+        });
     }
 
     renderProgress() {
-        const remainingMinutes = this.getRemainingMinutes();
+        const remainingMinutes = Math.floor(this.getRemainingSeconds() / 60);
 
         let text = "";
         if (remainingMinutes > 0) {
@@ -53,142 +140,32 @@ class VideoTimer {
             }
         }
 
-        $("#progress").width(this.getPercent() + "%");
-        $("#progress-text").text(text);
+        $("#progressbar-progress").width(Math.ceil(this.currentSeconds * 100 / this.totalSeconds) + "%");
+        $("#progressbar-text").text(text);
     }
 
-    getRemainingMinutes() {
-        return Math.floor(this.getRemainingSeconds() / 60);
+    updatePlayerSize() {
+        $("#video").width($(window).width());
+        $("#video").height($(window).height());
+    }
+
+    stop() {
+        if (this.intervalHandle) {
+            clearInterval(this.intervalHandle);
+        }
+        $("#progressbar-progress").addClass("finished");
     }
 
     getRemainingSeconds() {
         return this.totalSeconds - this.currentSeconds;
     }
-
-    getTotalSeconds() {
-        return this.totalSeconds;
-    }
-
-    getPercent() {
-        return Math.ceil(this.currentSeconds * 100 / this.totalSeconds);
-    }
 }
 
 function start(form) {
-    $("#form").remove();
-
-    const video = form.video.value;
-    timer = new VideoTimer(form.minutes.value);
-
-    renderVideo(video);
-    renderAudio(video);
-    renderCredits(video);
-    updatePlayerSize();
-    updatePlaybackRate(timer);
-    updateAudioVolume();
-
+    timer = new VideoTimer(
+        form.minutes.value * 60,
+        form.scene.value,
+        form.music.checked
+    );
     timer.start();
-    playVideo();
-    playAudio();
-}
-
-function renderVideo(video) {
-    const videoObj = $("<video/>", {
-        id: "video"
-    });
-    $("<source/>", {
-        src: "videos/"+video+".webm",
-        type: "video/webm"
-    }).appendTo(videoObj);
-    videoObj.prependTo($("#player"));
-}
-
-function renderAudio(video) {
-    const audioObj = $("<audio/>", {
-        id: "audio"
-    });
-    $("<source/>", {
-        src: "audio/"+video+".mp3",
-        type: "audio/mpeg"
-    }).appendTo(audioObj);
-    audioObj.prependTo($("#player"));
-}
-
-function renderAudioHalfTimeNotification() {
-    const audioObj = $("<audio/>", {
-        id: "audio-half-time-notification"
-    });
-    $("<source/>", {
-        src: "audio/notification_sound_half.mp3",
-        type: "audio/mpeg"
-    }).appendTo(audioObj);
-    audioObj.prependTo($("#player"));
-    audioObj.get(0).play();
-}
-
-function renderAudioEndTimeNotification() {
-    const audioObj = $("<audio/>", {
-        id: "audio-ending-time-notification"
-    });
-    $("<source/>", {
-        src: "audio/notification_sound_ending.mp3",
-        type: "audio/mpeg"
-    }).appendTo(audioObj);
-    audioObj.prependTo($("#player"));
-    audioObj.get(0).play();
-}
-
-function renderCredits(video) {
-    renderVideoCredits(video);
-    renderAudioCredits(video);
-}
-
-function renderVideoCredits(video) {
-    const req = new XMLHttpRequest();
-    req.open("GET", "video_sources/"+video+".txt", false);
-    req.send();
-
-    const videoCredits = req.responseText;
-    $("#video-credits").html(videoCredits);
-    $("#video-credits-container").show();
-}
-
-function renderAudioCredits(video) {
-    const req = new XMLHttpRequest();
-    req.open("GET", "audio_sources/"+video+".txt", false);
-    req.send();
-
-    const audioCredits = req.responseText;
-    $("#audio-credits").html(audioCredits);
-    $("#audio-credits-container").show();
-}
-
-function updatePlayerSize() {
-    const videoObj = $("#video");
-    if (videoObj.length) {
-        videoObj.width($(window).width());
-        videoObj.height($(window).height());
-    }
-}
-
-function updatePlaybackRate(timer) {
-    $("#video").on("durationchange", () => {
-        const videoDOM = $("#video").get(0);
-        const videoDuration = videoDOM.duration;
-        const timerDuration = timer.getTotalSeconds();
-
-        videoDOM.playbackRate = videoDuration / timerDuration;
-    });
-}
-
-function updateAudioVolume() {
-    $("#audio").get(0).volume = 0.5;
-}
-
-function playVideo() {
-    $("#video").get(0).play();
-}
-
-function playAudio() {
-    $("#audio").get(0).play();
 }

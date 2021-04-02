@@ -1,0 +1,90 @@
+/* general */
+
+body {
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+}
+
+video {
+    object-fit: fill;
+}
+
+/* theme */
+
+textarea, input[type="checkbox"] {
+    background-color: #fbfbfb;
+}
+
+.jumbotron {
+    border-radius: 0.5rem;
+}
+
+.jmt-background-color {
+	background-color: #e0e0e0;
+}
+
+.jmt-important {
+    color: #f18613;
+}
+
+.center-item {
+    position: relative;
+    left: -50%;
+    top: -50%;
+}
+
+/* player */
+
+#player {
+    display: none;
+}
+
+/* credits */
+
+#credits-container {
+    color: #ffffff;
+    font-size: xx-small;
+    position: absolute;
+    bottom: 1%;
+    width: 100%;
+}
+
+/* progress bar */
+
+#progressbar-container {
+    position: absolute;
+    left: 50%;
+    top: 80%;
+    width: 75%;
+}
+
+#progressbar-bar {
+    background-color: #d3d3d3;
+    border-radius: 1em;
+    position: absolute;
+    width: 100%;
+}
+
+#progressbar-progress {
+    background-color: #ff9800;
+    border-radius: 1em;
+    height: 30px;
+    width: 0%;
+}
+#progressbar-progress.finished {
+    background-color: #3b9e3b;
+}
+
+#progressbar-text-container {
+    position: absolute;
+    left: 50%;
+    line-height: 30px;
+    text-align: center;
+}
+
+#progressbar-text {
+    color: #000000;
+    position: relative;
+    left: -50%;
+}

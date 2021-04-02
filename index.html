@@ -1,69 +1,107 @@
 <!DOCTYPE html>
 <html lang="de">
 	<head>
+        <title>Junges Münsterschwarzach - Timer</title>
+        <meta name="author" content="Lucas 'Pad' Kinne">
         <meta charset="UTF-8"/>
+        <link rel="icon" href="favicon.png">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/stylesheet.css"/>
+        <script src="js/bootstrap.bundle.min.js"></script>
         <script src="js/jquery.min.js"></script>
         <script src="js/script.js"></script>
-        <link rel="stylesheet" href="css/style.css"/>
 	</head>
 	<body>
-		<div id="form">
-            <form action="" method="GET" onsubmit="return false">
-                <label for="time">Zeit:</label><br/>
-                <input name="minutes" id="minutes" type="number" min="1" max="60" value="3"/>
-                <label for="minutes">Minuten</label><br/><br/>
+		<div id="form" class="container">
+            <div class="jumbotron jmt-background-color mt-4 p-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h1 class="d-inline-block m-2 jmt-important">Timer</h1>
+                    <img class="d-inline-block m-2" src="/logo.png" height="100" width="100"/>
+                </div>
+                <hr>
+                <form name="form" action="" method="GET" onsubmit="return false" class="form-horizontal">
+                    <div class="form-group">
+                        <label class="control-label col-12" for="minutes"><strong>Zeit (in Minuten):</strong></label>
+                        <div class="col-12">
+                            <input id="minutes" class="form-control" name="minutes" type="number" min="1" max="60" value="3"/>
+                        </div>
+                    </div>
 
-                <label for="video">Video:</label><br/>
-                <input name="video" type="radio" value="sunrise_mountain_lake" id="sunrise_mountain_lake"/>
-                <label for="sunrise_mountain_lake">Bergsee</label><br/>
-                <input name="video" type="radio" value="sunrise_city" id="sunrise_city"/>
-                <label for="sunrise_city">Großstadt</label><br/>
-                <input name="video" type="radio" value="sunrise_sea" id="sunrise_sea" checked="checked"/>
-                <label for="sunrise_sea">Meer</label><br/>
-                <input name="video" type="radio" value="sunrise_town" id="sunrise_town"/>
-                <label for="sunrise_town">Vorstadt</label><br/>
-                <input name="video" type="radio" value="sunrise_forest" id="sunrise_forest"/>
-                <label for="sunrise_forest">Wald</label><br/>
-                <input name="video" type="radio" value="sunrise_desert" id="sunrise_desert"/>
-                <label for="sunrise_desert">Wüste</label><br/><br/>
+                    <div class="form-group mt-3">
+                        <label class="control-label col-12" for="scene"><strong>Szene:</strong></label>
+                        <div class="form-check">
+                            <input id="sunrise_mountain_lake" class="form-check-input" name="scene" type="radio" value="sunrise_mountain_lake" />
+                            <label for="sunrise_mountain_lake" class="form-check-label">Bergsee</label>
+                        </div>
+                        <div class="form-check">
+                            <input id="sunrise_city" class="form-check-input" name="scene" type="radio" value="sunrise_city" />
+                            <label for="sunrise_city" class="form-check-label">Großstadt</label>
+                        </div>
+                        <div class="form-check">
+                            <input id="sunrise_sea" class="form-check-input" name="scene" type="radio" value="sunrise_sea" checked/>
+                            <label for="sunrise_sea" class="form-check-label">Meer</label>
+                        </div>
+                        <div class="form-check">
+                            <input id="sunrise_town" class="form-check-input" name="scene" type="radio" value="sunrise_town" />
+                            <label for="sunrise_town" class="form-check-label">Vorstadt</label>
+                        </div>
+                        <div class="form-check">
+                            <input id="sunrise_forest" class="form-check-input" name="scene" type="radio" value="sunrise_forest" />
+                            <label for="sunrise_forest" class="form-check-label">Wald</label>
+                        </div>
+                        <div class="form-check">
+                            <input id="sunrise_desert" class="form-check-input" name="scene" type="radio" value="sunrise_desert" />
+                            <label for="sunrise_desert" class="form-check-label">Wüste</label>
+                        </div>
+                    </div>
 
-                <input type="submit" value="Start" onclick="start(this.form);"/>
-            </form>
+                    <div class="form-check mt-4">
+                        <input class="form-check-input" type="checkbox" name="music" checked>
+                        <label class="form-check-label" for="music">
+                            Entspannende Hintergrundmusik abspielen
+                        </label>
+                    </div>
+
+                    <div class="form-group mt-4">
+                        <div class="col-12">
+                            <button id="submit" type="submit" class="btn btn-success" onclick="start(this.form)">Absenden</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
 		</div>
         <div id="player">
-            <!-- video source is rendered here -->
-            <!-- audio source is rendered here -->
-            <div id="video-credits-container">
-               <div id="video-credits"></div> 
+            <div id="video-container">
+                <!-- video source is rendered here -->
             </div>
-            <div id="audio-half-time-credits-container">
+            <div id="audio-container">
+                <!-- audio source is rendered here -->
+            </div>
+            <div id="progressbar-container">
+                <div class="center-item">
+                    <div id="progressbar-bar">
+                        <div id="progressbar-progress"></div>
+                    </div>
+                    <div id="progressbar-text-container">
+                        <div id="progressbar-text"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="credits-container" class="d-flex justify-content-around align-items-center">
+                <div id="video-credits"></div>
                 <div id="audio-half-time-credits">
                     ––––––––––––––––––––––––––––<br/>
                     Half-time Audio Source :<br/>
                     https://youtu.be/9AAA9_n3U7k<br/>
                     ––––––––––––––––––––––––––––
-                </div> 
-             </div>
-             <div id="audio-ending-time-credits-container">
+                </div>
                 <div id="audio-ending-time-credits">
                     ––––––––––––––––––––––––––––-------------------------------------------------<br/>
                     Ending-time Audio Source :<br/>
                     https://commons.wikimedia.org/wiki/File:Small_tibetan_singing_bowl.ogg<br/>
                     ––––––––––––––––––––––––––––-------------------------------------------------
-                </div> 
-             </div>
-            <div id="audio-credits-container">
-                <div id="audio-credits"></div> 
-             </div>
-            <div id="remaining-progressbar">
-                <div class="center-item">
-                    <div id="bar">
-                        <div id="progress"></div>
-                    </div>
-                    <div id="progress-text-container">
-                        <div id="progress-text"></div>
-                    </div>
                 </div>
+                <div id="audio-background-music-credits"></div>
             </div>
         </div>
 	</body>
