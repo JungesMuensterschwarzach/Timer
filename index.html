@@ -18,7 +18,8 @@
         <div class="jumbotron jmt-background-color mt-4 p-3">
             <div class="d-flex justify-content-between align-items-center">
                 <h1 class="d-inline-block m-2 jmt-important">Timer</h1>
-                <img class="d-inline-block m-2" src="icons/logo.png" height="100" width="100" />
+                <img class="d-inline-block m-2 pointer" src="icons/logo.png" height="100" width="100"
+                    onclick="window.location.href = 'https://app.junges-muensterschwarzach.de';"/>
             </div>
             <hr>
             <form name="form" action="" method="GET" onsubmit="return false" class="form-horizontal">
@@ -99,13 +100,13 @@
         <div id="audio-container">
             <!-- audio source is rendered here -->
         </div>
-        <a tabindex="0" id="share-container">
+        <a tabindex="0" id="share-container" class="pointer">
             <img src="icons/share.png" height="20" width="20" />
         </a>
         <div id="text-container">
             <div id="text"></div>
         </div>
-        <div id="logo-container" onclick="window.location.href = 'https://app.junges-muensterschwarzach.de';">
+        <div id="logo-container" class="pointer" onclick="window.location.href = 'https://app.junges-muensterschwarzach.de';">
             <img src="icons/logo.png" height="65" width="65" />
         </div>
         <div id="progressbar-container">
