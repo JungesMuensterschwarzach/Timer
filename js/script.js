@@ -178,10 +178,10 @@ class VideoTimer {
 
     renderProgress() {
         const remainingSeconds = this.endingUnixSeconds - this.currentUnixSeconds;
-        const remainingMinutes = Math.floor(remainingSeconds / 60);
+        const remainingMinutes = Math.floor(remainingSeconds / 60) + 1;
 
         let text = "";
-        if (remainingMinutes > 0) {
+        if (remainingMinutes > 1) {
             text += remainingMinutes + " Minute" + (remainingMinutes !== 1 ? "n" : "");
         } else if (remainingSeconds > 0) {
             text += remainingSeconds + " Sekunde" + (remainingSeconds !== 1 ? "n" : "");
@@ -228,7 +228,7 @@ function manualStart(form) {
     timer = new VideoTimer(
         currentUnixSeconds,
         currentUnixSeconds + form.minutes.value * 60,
-        form.text.value,
+        form.text.value.replace(/\n/g, "<br/>"),
         form.scene.value,
         form.music.checked
     );
