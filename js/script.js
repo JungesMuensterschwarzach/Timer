@@ -59,7 +59,7 @@ class VideoTimer {
 
     renderText() {
         if (this.text) {
-            $("#text").text(this.text);
+            $("#text").html(this.text);
             $("#text-container").show();
         }
     }
@@ -159,7 +159,9 @@ class VideoTimer {
         this.intervalHandle = setInterval(() => {
             this.currentUnixSeconds++;
 
-            if (this.currentUnixSeconds == Math.floor(this.endingUnixSeconds / 2)) {
+            const elapsed = this.currentUnixSeconds - this.startUnixSeconds;
+            const total = this.endingUnixSeconds - this.startUnixSeconds;
+            if (elapsed == Math.floor(total / 2)) {
                 this.renderHalfTimeSound();
             } else if (this.currentUnixSeconds >= this.endingUnixSeconds) {
                 this.renderEndingTimeSound();

@@ -87,7 +87,7 @@ textarea, input[type="checkbox"] {
 #text {
     background-color: #d3d3d3;
     border-radius: 5px;
-    font-size: x-large;
+    /* font-size: x-large; */
     padding: 3px 6px;
     position: relative;
     left: -50%;
