@@ -3,9 +3,7 @@ services:
   jmt:
     container_name: jmt
     image: jungesmuensterschwarzach/timer:latest
-    build:
-      context: .
-    restart: on-failure
+    restart: always
     networks:
       jenkins:
         ipv4_address: 172.16.1.230
