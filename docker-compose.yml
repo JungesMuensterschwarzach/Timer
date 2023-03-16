@@ -2,7 +2,7 @@ version: '3'
 services:
   jmt:
     container_name: jmt
-    image: jungesmuensterschwarzach/timer:latest
+    image: jenkinsluckev/timer:latest
     restart: always
     networks:
       jenkins:
